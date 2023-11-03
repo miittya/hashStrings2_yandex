@@ -1,0 +1,8 @@
+# ninja log v5
+7	388	7207159262558888	CMakeFiles/AlgTrain4_0.dir/A.cpp.obj	ec427718e6027bbb
+3	321	7207159438622035	CMakeFiles/AlgTrain4_0.dir/main.cpp.obj	3b769b0e063f486
+323	411	7207144512734747	AlgTrain4_0.exe	5fc9d48c5adc0086
+12	333	7207159262011077	CMakeFiles/AlgTrain4_0.dir/B.cpp.obj	ca0169623d408ff1
+1	110	7207161045628049	build.ninja	638a63eea82f9bce
+2	317	7207161048969742	CMakeFiles/AlgTrain4_0.dir/main.cpp.obj	3b769b0e063f486
+318	405	7207161049817091	AlgTrain4_0.exe	5fc9d48c5adc0086
