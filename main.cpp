@@ -1,19 +1,57 @@
 #include <iostream>
 #include <vector>
-#include <cmath>
+#include <cstdlib>
 using namespace std;
 
-int main() {
-    int a, b, c, d, m, n;
-    cin >> a >> b >> c >> d;
-    m = a*d + b*c;
-    n = b*d;
-    int max = (m>n) ? m : n;
-    for (int i = max; i > 0; --i) {
-        if (m%i == 0 && n%i == 0) {
-            m/=i;
-            n/=i;
+int Partition (vector<int>& vec, int l, int r) {
+    int x = vec[r];
+    int L = l - 1;
+    int R = r + 1;
+    while (1) {
+        do {
+            L++;
+        } while (vec[L] < x);
+        do {
+            R--;
+        } while (vec[R] > x);
+        if (L >= R) {
+            return R;
         }
+        swap(vec[L], vec[R]);
     }
-    cout << m << " " << n;
+}
+
+int randomizedPartition(vector<int>& vec, int l, int r)
+{
+    int pivotIndex = rand() % (r - l + 1) + l;
+
+    swap(vec[pivotIndex], vec[r]);
+
+    return Partition(vec, l, r);
+}
+
+void quickSort(vector<int>& vec, int l, int r) {
+    if (l < r) {
+        int p = randomizedPartition(vec, l, r);
+        quickSort(vec, l, p);
+        quickSort(vec, p + 1, r);
+    }
+}
+
+int main() {
+    int N, a;
+    vector<int> vec;
+    cin >> N;
+
+    for (int i = 0; i < N; ++i) {
+        cin >> a;
+        vec.push_back(a);
+    }
+
+    quickSort(vec, 0, N - 1);
+    for (int i = 0; i < N; ++i) {
+        cout << vec[i] << " ";
+    }
+
+    return 0;
 }
