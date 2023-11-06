@@ -1,54 +1,62 @@
 #include <iostream>
 #include <vector>
-#include <cstdlib>
+#include <cmath>
 using namespace std;
 
-int Partition (vector<int>& vec, int l, int r) {
-    int x = vec[r];
-    int L = l - 1;
-    int R = r + 1;
-    while (1) {
-        do {
-            L++;
-        } while (vec[L] < x);
-        do {
-            R--;
-        } while (vec[R] > x);
-        if (L >= R) {
-            return R;
-        }
-        swap(vec[L], vec[R]);
-    }
-}
-
-int randomizedPartition(vector<int>& vec, int l, int r)
-{
-    int pivotIndex = rand() % (r - l + 1) + l;
-
-    swap(vec[pivotIndex], vec[r]);
-
-    return Partition(vec, l, r);
-}
-
-void quickSort(vector<int>& vec, int l, int r) {
-    if (l < r) {
-        int p = randomizedPartition(vec, l, r);
-        quickSort(vec, l, p);
-        quickSort(vec, p + 1, r);
-    }
-}
-
-int main() {
-    int N, a;
-    vector<int> vec;
+void read (int& N, int& a, vector<int>& vec, vector<int>& temp){
     cin >> N;
-
     for (int i = 0; i < N; ++i) {
         cin >> a;
         vec.push_back(a);
+        temp.push_back(a);
+    }
+}
+
+void merge(vector<int>& vec, vector<int>& temp, int l, int m, int r) {
+    int i = l;
+    int k = l;
+    int j = m + 1;
+
+    while (i < m + 1 && j < r + 1) {
+        if (vec[i] < vec[j]) {
+            temp[k] = vec[i];
+            i++;
+            k++;
+        } else {
+            temp[k] = vec[j];
+            j++;
+            k++;
+        }
     }
 
-    quickSort(vec, 0, N - 1);
+    while (i < m + 1) {
+        temp[k] = vec[i];
+        i++;
+        k++;
+    }
+
+    for (int n = l; n <= r; ++n) {
+        vec[n] = temp[n];
+    }
+}
+
+void mergeSort(vector<int>& vec, vector<int>& temp, int l, int r) {
+    if (l < r) {
+        int m = floor((r + l)/2);
+        mergeSort(vec, temp, l, m);
+        mergeSort(vec, temp, m + 1, r);
+        merge(vec, temp, l, m, r);
+    }
+}
+
+int main () {
+    int N;
+    int a;
+    vector<int> vec;
+    vector<int> temp;
+    read(N, a, vec, temp);
+    mergeSort(vec, temp, 0, vec.size()-1);
+
     for (int i = 0; i < N; ++i) {
         cout << vec[i] << " ";
     }
