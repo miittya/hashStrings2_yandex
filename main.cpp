@@ -1,65 +1,43 @@
 #include <iostream>
-#include <vector>
+#include <string>
 #include <cmath>
+
 using namespace std;
+const int x_ = 257;
+const int p = pow(10,9) + 7;
 
-void read (int& N, int& a, vector<int>& vec, vector<int>& temp){
-    cin >> N;
-    for (int i = 0; i < N; ++i) {
-        cin >> a;
-        vec.push_back(a);
-        temp.push_back(a);
-    }
+bool isEqual (long from1, long from2, long slen, long* h, long* x) {
+    return ((h[from1 + slen - 1] + h[from2 - 1] * x[slen]) % p ==
+    (h[from2 + slen - 1] + h[from1 - 1] * x[slen]) % p
+    );
 }
 
-void merge(vector<int>& vec, vector<int>& temp, int l, int m, int r) {
-    int i = l;
-    int k = l;
-    int j = m + 1;
+int main() {
+    //объявления переменных и чтение из консоли
+    string str;
+    getline(cin, str);
+    long Q, L, A, B;
+    long n = str.size();
+    long* h = new long[n + 1];
+    long* x = new long[n + 1];
+    h[0] = 0;
+    x[0] = 1;
+    cin >> Q;
+    str = ' ' + str;
 
-    while (i < m + 1 && j < r + 1) {
-        if (vec[i] < vec[j]) {
-            temp[k] = vec[i];
-            i++;
-            k++;
+    //заполнение массивов
+    for (int i = 1; i < n + 1; ++i) {
+        h[i] = (h[i - 1] * x_ + int(str[i]) - 96) % p;
+        x[i] = (x[i - 1] * x_) % p;
+    }
+
+    for (int i = 0; i < Q; ++i) {
+        cin >> L >> A >> B;
+        if (isEqual(A + 1, B + 1, L, h, x)) {
+            cout << "yes" << endl;
         } else {
-            temp[k] = vec[j];
-            j++;
-            k++;
+            cout << "no" << endl;
         }
+
     }
-
-    while (i < m + 1) {
-        temp[k] = vec[i];
-        i++;
-        k++;
-    }
-
-    for (int n = l; n <= r; ++n) {
-        vec[n] = temp[n];
-    }
-}
-
-void mergeSort(vector<int>& vec, vector<int>& temp, int l, int r) {
-    if (l < r) {
-        int m = floor((r + l)/2);
-        mergeSort(vec, temp, l, m);
-        mergeSort(vec, temp, m + 1, r);
-        merge(vec, temp, l, m, r);
-    }
-}
-
-int main () {
-    int N;
-    int a;
-    vector<int> vec;
-    vector<int> temp;
-    read(N, a, vec, temp);
-    mergeSort(vec, temp, 0, vec.size()-1);
-
-    for (int i = 0; i < N; ++i) {
-        cout << vec[i] << " ";
-    }
-
-    return 0;
 }
